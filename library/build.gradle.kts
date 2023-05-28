@@ -37,7 +37,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.1fexd"
             artifactId = "compose-route-util"
-            version = "0.0.2"
+            version = "0.0.3"
 
             afterEvaluate {
                 from(components["release"])
