@@ -11,7 +11,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
+import kotlin.reflect.typeOf
 
 fun <T : Any, A : Route.Arguments<T, U>, U> NavController.navigate(
     route: ArgumentRoute<T, A, U>,
@@ -70,7 +72,7 @@ abstract class Route<T : RouteData, A : Route.Arguments<T, U>, U : Route.Unbundl
         val property: KProperty1<T, V>,
         val default: V? = null,
     ) {
-        private val dataType = inferFromKClass(property::class)
+        private val dataType = inferFromKClass(property.returnType.classifier as KClass<*>)
 
         @Suppress("UNCHECKED_CAST")
         fun <R> unbundle(bundle: Bundle) = dataType[bundle, property.name].let {
