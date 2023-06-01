@@ -162,7 +162,7 @@ abstract class Route3<T : RouteData, R1, R2, R3>(
 }
 
 
-inline fun <reified T : RouteData, A : Route.Arguments<T, U>, U> NavGraphBuilder.composable(
+inline fun <reified T : RouteData, A : Route.Arguments<T, U>, U> NavGraphBuilder.argumentRouteComposable(
     route: ArgumentRoute<T, A, U>,
     crossinline content: @Composable (NavBackStackEntry, T) -> Unit
 ) {
@@ -179,7 +179,7 @@ inline fun <reified T : RouteData, A : Route.Arguments<T, U>, U> NavGraphBuilder
 }
 
 @OptIn(ExperimentalAnimationApi::class)
-inline fun <reified T : RouteData, A : Route.Arguments<T, U>, U> NavGraphBuilder.composable(
+inline fun <reified T : RouteData, A : Route.Arguments<T, U>, U> NavGraphBuilder.animatedArgumentRouteComposable(
     route: ArgumentRoute<T, A, U>,
     noinline enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
     noinline exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
