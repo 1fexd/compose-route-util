@@ -1,6 +1,11 @@
 package fe.android.compose.route.util
 
 import android.os.Bundle
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
@@ -14,6 +19,7 @@ import androidx.navigation.navDeepLink
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.typeOf
+import com.google.accompanist.navigation.animation.composable as animatedComposable
 
 fun <T : Any, A : Route.Arguments<T, U>, U> NavController.navigate(
     route: ArgumentRoute<T, A, U>,
@@ -160,10 +166,35 @@ inline fun <reified T : RouteData, A : Route.Arguments<T, U>, U> NavGraphBuilder
     route: ArgumentRoute<T, A, U>,
     crossinline content: @Composable (NavBackStackEntry, T) -> Unit
 ) {
-    this@composable.composable(
+    composable(
         route.route,
         route.navArguments,
         route.navDeepLinks,
+    ) { stack ->
+        val bundle = stack.arguments ?: throw IllegalArgumentException("No bundle provided!")
+        val data = route.instance(bundle)
+
+        content(stack, data)
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+inline fun <reified T : RouteData, A : Route.Arguments<T, U>, U> NavGraphBuilder.composable(
+    route: ArgumentRoute<T, A, U>,
+    noinline enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
+    noinline exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
+    noinline popEnterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? = enterTransition,
+    noinline popExitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? = exitTransition,
+    crossinline content: @Composable AnimatedVisibilityScope.(NavBackStackEntry, T) -> Unit
+) {
+    animatedComposable(
+        route.route,
+        route.navArguments,
+        route.navDeepLinks,
+        enterTransition,
+        exitTransition,
+        popEnterTransition,
+        popExitTransition
     ) { stack ->
         val bundle = stack.arguments ?: throw IllegalArgumentException("No bundle provided!")
         val data = route.instance(bundle)

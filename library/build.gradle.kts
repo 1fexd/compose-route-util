@@ -30,6 +30,8 @@ android {
 dependencies {
     api("androidx.compose.runtime:runtime:1.4.3")
     api("androidx.navigation:navigation-compose:2.5.3")
+    api("com.google.accompanist:accompanist-navigation-animation:0.30.1")
+
     api("org.jetbrains.kotlin:kotlin-reflect:1.8.21")
 }
 
