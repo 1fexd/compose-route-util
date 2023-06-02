@@ -162,9 +162,9 @@ abstract class Route3<T : RouteData, R1, R2, R3>(
 }
 
 
-inline fun <reified T : RouteData, A : Route.Arguments<T, U>, U> NavGraphBuilder.argumentRouteComposable(
+fun <T : RouteData, A : Route.Arguments<T, U>, U> NavGraphBuilder.argumentRouteComposable(
     route: ArgumentRoute<T, A, U>,
-    crossinline content: @Composable (NavBackStackEntry, T) -> Unit
+    content: @Composable (NavBackStackEntry, T) -> Unit
 ) {
     composable(
         route.route,
@@ -179,13 +179,13 @@ inline fun <reified T : RouteData, A : Route.Arguments<T, U>, U> NavGraphBuilder
 }
 
 @OptIn(ExperimentalAnimationApi::class)
-inline fun <reified T : RouteData, A : Route.Arguments<T, U>, U> NavGraphBuilder.animatedArgumentRouteComposable(
+fun <T : RouteData, A : Route.Arguments<T, U>, U> NavGraphBuilder.animatedArgumentRouteComposable(
     route: ArgumentRoute<T, A, U>,
-    noinline enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
-    noinline exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
-    noinline popEnterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? = enterTransition,
-    noinline popExitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? = exitTransition,
-    crossinline content: @Composable AnimatedVisibilityScope.(NavBackStackEntry, T) -> Unit
+    enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
+    exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
+    popEnterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? = enterTransition,
+    popExitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? = exitTransition,
+    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry, T) -> Unit
 ) {
     animatedComposable(
         route.route,
@@ -202,4 +202,3 @@ inline fun <reified T : RouteData, A : Route.Arguments<T, U>, U> NavGraphBuilder
         content(stack, data)
     }
 }
-
